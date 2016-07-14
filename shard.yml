@@ -1,0 +1,11 @@
+name: redis-reconnect
+version: 0.1.0
+
+authors:
+  - Konstantin Makarchev <kostya27@gmail.com>
+
+dependencies:
+  redis:
+    github: stefanwille/crystal-redis
+
+license: MIT
