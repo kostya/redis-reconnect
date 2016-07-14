@@ -24,3 +24,15 @@ r = Redis::Reconnect.new(host: "localhost", port: 6379)
 r.set("bla", "a")
 p r.get("bla")
 ```
+
+Ok to use it with Pool (ysbaddaden/pool):
+
+```crystal
+pool = ConnectionPool.new(capacity: 25) do
+  Redis::Reconnect.new(host: "localhost", port: 6379)
+end
+
+pool.connection do |conn|
+  conn.get "bla"
+end
+```
