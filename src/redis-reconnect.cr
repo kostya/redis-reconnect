@@ -3,7 +3,7 @@ require "redis"
 class Redis::Reconnect
   @client : Redis
 
-  def initialize(@host : String = "localhost", @port : Int32 = 6379, @unixsocket : String? = nil, @password : String? = nil, @database : String? = nil)
+  def initialize(@host : String = "localhost", @port : Int32 = 6379, @unixsocket : String? = nil, @password : String? = nil, @database : Int32? = nil)
     @client = Redis.new(host: @host, port: @port, unixsocket: @unixsocket, password: @password, database: @database)
   end
 
@@ -26,7 +26,7 @@ class Redis::Reconnect
           raise ex
         end
       end
-      
+
     {% end %}
   {% end %}
 end
