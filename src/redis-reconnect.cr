@@ -11,6 +11,8 @@ class Redis::Reconnect
     @client = Redis.new(host: @host, port: @port, unixsocket: @unixsocket, password: @password, database: @database)
   end
 
+  DISCONNECTED_MSG = "RedisError: Disconnected"
+
   {% for method in Redis::Commands.methods %}
     {% if method.visibility == :public %}
       {% define = "#{method.name.id}(#{method.args.join(", ").id})" %}
@@ -19,7 +21,7 @@ class Redis::Reconnect
       def {{ define.id }}
         @client.{{method.name.id}}({{args}})
       rescue ex : Redis::Error
-        if ex.message == "Disconnected"
+        if ex.message == DISCONNECTED_MSG
           reconnect!
           @client.{{method.name.id}}({{args}})
         else
