@@ -27,4 +27,21 @@ describe Redis::Reconnect do
     client.get("bla1").should eq "a"
   end
 
+  it "reconnect method with block" do
+    client1 = Redis::Reconnect.new(**CONFIG)
+    client2 = Redis::Reconnect.new(**CONFIG)
+    ch = Channel(String).new
+    spawn do
+      client2.subscribe("sub_test") do |on|
+        on.message do |_, msg|
+          ch.send(msg)
+        end
+      end
+    end
+    sleep 0.1
+    client1.publish("sub_test", "bla")
+
+    ch.receive.should eq "bla"
+  end
+
 end

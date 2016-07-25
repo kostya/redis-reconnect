@@ -8,23 +8,29 @@ class Redis::Reconnect
   end
 
   def reconnect!
+    if old_client = @client
+      old_client.close rescue nil
+    end
     @client = Redis.new(host: @host, port: @port, unixsocket: @unixsocket, password: @password, database: @database)
   end
 
-  DISCONNECTED_MSG = "RedisError: Disconnected"
+  macro method_missing(call)
+    safe_call { @client.{{call}} }
+  end
 
-  {% for method in Redis::Commands.methods %}
-    {% if method.visibility == :public %}
-      {% define = "#{method.name.id}(#{method.args.join(", ").id})" %}
-      {% args = method.args.map { |a| a.name }.join(", ").id %}
-  
-      def {{ define.id }}
-        @client.{{method.name.id}}({{args}})
-      rescue ex : Redis::DisconnectedError
-        reconnect!
-        @client.{{method.name.id}}({{args}})
-      end
+  private def safe_call
+    yield
+  rescue ex : Redis::DisconnectedError
+    reconnect!
+    yield
+  end
 
-    {% end %}
-  {% end %}
+  def subscribe(*channels, &callback_setup_block : Redis::Subscription ->)
+    @client.subscribe(*channels) { |s| callback_setup_block.call(s) }
+  end
+
+  def psubscribe(*channel_patterns, &callback_setup_block : Redis::Subscription ->)
+    @client.subscribe(*channel_patterns) { |s| callback_setup_block.call(s) }
+  end
+
 end
