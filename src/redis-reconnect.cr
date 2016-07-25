@@ -20,13 +20,9 @@ class Redis::Reconnect
   
       def {{ define.id }}
         @client.{{method.name.id}}({{args}})
-      rescue ex : Redis::Error
-        if ex.message == DISCONNECTED_MSG
-          reconnect!
-          @client.{{method.name.id}}({{args}})
-        else
-          raise ex
-        end
+      rescue ex : Redis::DisconnectedError
+        reconnect!
+        @client.{{method.name.id}}({{args}})
       end
 
     {% end %}
