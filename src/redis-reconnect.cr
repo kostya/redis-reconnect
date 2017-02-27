@@ -32,5 +32,4 @@ class Redis::Reconnect
   def psubscribe(*channel_patterns, &callback_setup_block : Redis::Subscription ->)
     @client.subscribe(*channel_patterns) { |s| callback_setup_block.call(s) }
   end
-
 end

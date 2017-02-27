@@ -1,7 +1,7 @@
 require "./spec_helper"
 
 # manualy run: redis-server --port 7777 --timeout 2
-CONFIG = {host: "localhost", port: 7777}
+CONFIG  = {host: "localhost", port: 7777}
 TIMEOUT = 2
 
 describe Redis::Reconnect do
@@ -43,5 +43,4 @@ describe Redis::Reconnect do
 
     ch.receive.should eq "bla"
   end
-
 end
