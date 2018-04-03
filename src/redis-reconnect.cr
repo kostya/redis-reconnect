@@ -1,6 +1,8 @@
 require "redis"
 
 class Redis::Reconnect
+  VERSION = "0.2"
+
   @client : Redis
 
   def initialize(@host = "localhost", @port = 6379, @unixsocket : String? = nil, @password : String? = nil, @database : Int32? = nil, @url : String? = nil)
@@ -8,9 +10,7 @@ class Redis::Reconnect
   end
 
   def reconnect!
-    if old_client = @client
-      old_client.close rescue nil
-    end
+    @client.close rescue nil
     @client = Redis.new(host: @host, port: @port, unixsocket: @unixsocket, password: @password, database: @database, url: @url)
   end
 
