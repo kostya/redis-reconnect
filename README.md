@@ -1,6 +1,6 @@
 # redis-reconnect
 
-Redis client with autoreconnection for slow clients (wrapper for stefanwille/crystal-redis). Very hacky.
+Redis client with autoreconnection for slow clients (wrapper for stefanwille/crystal-redis). Used as part of [redisoid](https://github.com/kostya/redisoid) shard.
 
 ## Installation
 
