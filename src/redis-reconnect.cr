@@ -1,7 +1,7 @@
 require "redis"
 
 class Redis::Reconnect
-  VERSION = "0.2"
+  VERSION = "0.3"
 
   @client : Redis
 
