@@ -1,3 +1,5 @@
+# THIS PROJECT DEPRECATED, RECONNECTION LOGIC NOW IMPLEMENTED IN stefanwille/crystal-redis
+
 # redis-reconnect
 
 Redis client with autoreconnection for slow clients (wrapper for stefanwille/crystal-redis). Used as part of [redisoid](https://github.com/kostya/redisoid) shard.
